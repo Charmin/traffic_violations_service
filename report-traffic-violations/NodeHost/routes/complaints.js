@@ -23,7 +23,7 @@ exports.addComplaint = function(db)
 
     	console.log('Updating complaint...'); 
     	console.log(JSON.stringify(complaint_text));
-        db.collection('complaint_list', function(err,collection)
+        db.collection('usercomplaints', function(err,collection)
         {
         	collection.insert(complaint_list,{safe:true},function(err, result)
         	{
@@ -47,7 +47,7 @@ exports.addComplaint = function(db)
      	var id = req.params.id;
      	console.log("Deleting complaint " + id);
 
-     	db.collection('complaint_list',function(err,collection)
+     	db.collection('usercomplaints',function(err,collection)
      	{
      		collection.remove({'_id':new BSON.ObjectID(id)} , {safe:true},function(err, result)
             { 			
@@ -64,3 +64,6 @@ exports.addComplaint = function(db)
      }
 
  }
+
+
+ 

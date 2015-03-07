@@ -1,9 +1,31 @@
 var express = require('express');
 var mongo = require('mongoskin');
+var multer  = require('multer');
+var app = express();
+var done=false;
+
 var db = mongo.db('mongodb://localhost:27017/complaints', {
-	'database': 'test',
-	'safe': true
+  'database': 'test',
+  'safe': true
 });
+
+
+app.use(multer({ dest: 'D:\GitHub\ChaiRepo\report-traffic-violations\NodeHost\images',
+rename: function (fieldname, filename) {
+    return filename+Date.now();
+  },
+onFileUploadStart: function (file) {
+  console.log(file.originalname + ' is starting ...')
+},
+onFileUploadComplete: function (file) {
+  console.log(file.fieldname + ' uploaded to  ' + file.path)
+  done=true;
+},
+onParseEnd: function(req,next){
+                next();
+             }
+}));
+
 
 
 // var Server = mongo.Server,
@@ -30,26 +52,33 @@ var db = mongo.db('mongodb://localhost:27017/complaints', {
 
 // });
 
- //image = require('./routes/image');
- complaints = require('./routes/complaints');
-
- var app = express();
-
- //app.get('/image',image.findimage(db));
-
- app.get('/complaints',complaints.getcomplaint(db));
  
- app.listen(3000);
- 
- console.log('Listening on port 3000. . .');
+
+ //image upload part here
 
 
-/* var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Traffic violations ??? really ??Shoot \n');
-}).listen(1337, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:1337/');
-/*To run the server, put the code into a file example.js and execute it with the node program from the command line:
-*/
+//complaints = require('./routes/complaints');
+//imageupload = require('./routes/image');
+
+
+/*Handling routes.*/
+
+app.get('./uploads',function(req,res){
+      res.sendfile("index.html");
+});
+
+app.post('/images',function(req,res){
+  if(done==true){
+    console.log(req.files);
+    res.end("File uploaded.");
+  }
+});
+
+complaints = require('./routes/complaints');
+//app.post('/image',imageupload.findimage(req,res));
+//app.get('/image',image.findimage(db));
+app.get('/complaints',complaints.getcomplaint(db));
+app.listen(3000);
+console.log('Listening on port 3000. . .');
+
 
