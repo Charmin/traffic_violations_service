@@ -10,7 +10,7 @@ var db = mongo.db('mongodb://localhost:27017/complaints', {
 });
 
 
-app.use(multer({ dest: 'D:\GitHub\ChaiRepo\report-traffic-violations\NodeHost\images',
+app.use(multer({ dest: 'images',
 rename: function (fieldname, filename) {
     return filename+Date.now();
   },
@@ -78,6 +78,7 @@ complaints = require('./routes/complaints');
 //app.post('/image',imageupload.findimage(req,res));
 //app.get('/image',image.findimage(db));
 app.get('/complaints',complaints.getcomplaint(db));
+app.post('/upload', complaints.upload);
 app.listen(3000);
 console.log('Listening on port 3000. . .');
 

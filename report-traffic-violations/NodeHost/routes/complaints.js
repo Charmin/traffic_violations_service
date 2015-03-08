@@ -16,6 +16,14 @@ exports.getcomplaint = function(db)
     }
 };
 
+exports.upload = function(req, res) {
+    console.log('uploading...');
+    if(done == true) {
+        console.log('file uploaded');
+        res.send('uploaded');
+    }
+}
+
 exports.addComplaint = function(db)
 {
     return function(req, res){
